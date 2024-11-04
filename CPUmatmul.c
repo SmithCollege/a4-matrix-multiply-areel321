@@ -27,14 +27,14 @@ int main() {
 
   for (int i = 0; i < size; i++) {
     for (int j = 0; j < size; j++) {
-      x[i * size + j] = 1; // x[i][j]
-      y[i * size + j] = 1;
+      x[i * size + j] = 1.0; // x[i][j]
+      y[i * size + j] = 1.0;
     }
   }
 
   for (int i = 0; i < size; i++) {
         for (int j = 0; j < size; j++) {
-            printf("%d ", x[i*size+j]);
+            printf("%f ", x[i*size+j]);
         }
         printf("\n");
     }
