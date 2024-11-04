@@ -4,21 +4,30 @@
 
 #define TILE_WIDTH 2
 
-__global__ void MatrixMulKernel(float* d_M, float* d_N, float* d_P, int Width)
+
+ __global__ void MatrixMulKernel(float* M, float* N, float* P, int Width)
 {
- //calculate row index of the d_P element and d_M
- int Row = blockIdx.y*blockDim.y+threadIdx.y;
- // Calculate the column idenx of d_P and d_N
- int Col = blockIdx.x*blockDim.x+threadIdx.x;
- 
- if ((Row < Width) && (Col < Width)) {
-	 float Pvalue = 0.0;
-	 // each thread computes one element of the block sub-matrix
-	 for (int k = 0; k < Width; ++k){
-	  Pvalue += d_M[Row*Width+k] * d_N[k*Width+Col];
-	 }
-	 d_P[Row * Width + Col] = Pvalue;
-  }
+ __shared__ float subTileM[TILE_WIDTH][TILE_WIDTH];
+ __shared__ float subTileN[TILE_WIDTH][TILE_WIDTH];
+ int bx = blockIdx.x; int by = blockIdx.y;
+ int tx = threadIdx.x; int ty = threadIdx.y;
+ // Identify the row and column of the P element to work on
+ int Row = by * TILE_WIDTH + ty;
+ int Col = bx * TILE_WIDTH + tx;
+ float Pvalue = 0;
+ // Loop over the M and N tiles required to compute the P element
+ // The code assumes that the Width is a multiple of TILE_WIDTH!
+ for (int m = 0; m < Width/TILE_WIDTH; ++m) {
+ // Collaborative loading of M and N tiles into shared memory
+ subTileM[ty][tx] = M[Row*Width + m*TILE_WIDTH+tx];
+ subTileN[ty][tx] = N[(m*TILE_WIDTH+ty)*Width+Col];
+ __syncthreads();
+ for (int k = 0; k < TILE_WIDTH; ++k) {
+ Pvalue += subTileM[ty][k] * subTileN[k][tx];
+ }
+ __syncthreads();
+ }
+ P[Row*Width+Col] = Pvalue;
 }
 
 
