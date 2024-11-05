@@ -28,10 +28,10 @@ of computational time/speed?
 ## Submission Checklist
 
 - [ ] Code
-  - [ ] CPU (.c)
-  - [ ] GPU (.cu)
-  - [ ] Tiled (.cu)
-  - [ ] cuBlas (.cu)
+  - [x] CPU (.c)
+  - [x] GPU (.cu)
+  - [x] Tiled (.cu)
+  - [x] cuBlas (.cu)
 - [ ] Graph/table of runtimes/profiled code results
 - [ ] Reflection (txt, md, pdf, etc)
 
