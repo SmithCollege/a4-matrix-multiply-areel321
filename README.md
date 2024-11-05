@@ -27,13 +27,13 @@ of computational time/speed?
 
 ## Submission Checklist
 
-- [ ] Code
+- [x] Code
   - [x] CPU (.c)
   - [x] GPU (.cu)
   - [x] Tiled (.cu)
   - [x] cuBlas (.cu)
-- [ ] Graph/table of runtimes/profiled code results
-- [ ] Reflection (txt, md, pdf, etc)
+- [x] Graph/table of runtimes/profiled code results
+- [x] Reflection (txt, md, pdf, etc)
 
 ## Peer Feedback
 
