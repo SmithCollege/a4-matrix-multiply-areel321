@@ -1,3 +1,4 @@
+[![Review Assignment Due Date](https://classroom.github.com/assets/deadline-readme-button-22041afd0340ce965d47ae6ef1cefeee28c7c493a6346c4f15d667ab976d596c.svg)](https://classroom.github.com/a/j7EgYxTu)
 # A4. Matrix Multiply
 
 Due Date: 11/5 at midnight
@@ -26,13 +27,13 @@ of computational time/speed?
 
 ## Submission Checklist
 
-- [ ] Code
-  - [ ] CPU (.c)
-  - [ ] GPU (.cu)
-  - [ ] Tiled (.cu)
-  - [ ] cuBlas (.cu)
-- [ ] Graph/table of runtimes/profiled code results
-- [ ] Reflection (txt, md, pdf, etc)
+- [x] Code
+  - [x] CPU (.c)
+  - [x] GPU (.cu)
+  - [x] Tiled (.cu)
+  - [x] cuBlas (.cu)
+- [x] Graph/table of runtimes/profiled code results
+- [x] Reflection (txt, md, pdf, etc)
 
 ## Peer Feedback
 
