@@ -2,8 +2,17 @@
 #include <math.h>
 #include <sys/time.h>
 
-#define TILE_WIDTH 2
+#define TILE_WIDTH 50
 
+
+double get_clock() {
+        struct timeval tv; int ok;
+        ok = gettimeofday(&tv, (void *) 0);
+        if (ok<0){
+                printf("gettimeofday error\n");
+        }
+        return (tv.tv_sec*1.0+tv.tv_usec*1.0E-6);
+}
 
  __global__ void MatrixMulKernel(float* M, float* N, float* P, int Width)
 {
@@ -37,6 +46,19 @@ int main(){
 	float *x, *y, *z;
 	float *hx, *hy, *hz;
 
+	double *times = (double *)malloc(sizeof(double) * width);
+
+
+                //calibrate the clock
+        double t0 = get_clock();
+        for (int i=0; i<width; i++){
+                times[i] = get_clock();
+        }
+        double t1 = get_clock();
+        printf("time per call: %f nx\n", (1000000000.0 * (t1-t0\
+)/width));
+
+
 	hx = (float *)malloc(sizeof(float)*width*width);
 	hy = (float *)malloc(sizeof(float)*width*width);
 	hz = (float *)malloc(sizeof(float)*width*width);
@@ -52,13 +74,13 @@ int main(){
 	    }
 	  }
 
-	for (int i=0;i<width;i++){
+/*	for (int i=0;i<width;i++){
 		for (int j=0;j<width;j++){
 			printf("%f ", hx[i*width+j]);
 			
 		}
 		printf("\n");
-	}
+	}*/
 	printf("\n");
 
 	cudaMemcpy(x, hx, sizeof(float)*width*width, cudaMemcpyHostToDevice);
@@ -71,9 +93,13 @@ int main(){
 	  ceil((1.0*width)/TILE_WIDTH), 1);
 	dim3 dimBlock(TILE_WIDTH, TILE_WIDTH, 1);
 	cudaDeviceSynchronize();
-	 // Launch the device computation threads!
+double start = get_clock();
+
+// Launch the device computation threads!
   	MatrixMulKernel<<<dimGrid, dimBlock>>>(x,y, z, width);
-  	printf("%s\n", cudaGetErrorString(cudaGetLastError()));
+double end = get_clock();
+
+printf("%s\n", cudaGetErrorString(cudaGetLastError()));
 
 	cudaMemcpy(hz, z, sizeof(float)*width*width, cudaMemcpyDeviceToHost);
 	for (int i = 0; i < width; i++) {
@@ -85,6 +111,8 @@ int main(){
 	    }
 	  }
 
+//print clock times
+        printf("start: %f, end: %f\n", start, end);
 
 	cudaFree(x);
 	cudaFree(y);
@@ -92,6 +120,7 @@ int main(){
 	free(hx);
 	free(hy);
 	free(hz);
+free(times);
 
 	return 0;
 }
